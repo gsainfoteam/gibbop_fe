@@ -29,6 +29,7 @@ const StyledList = styled.div`
   color: #1a1a1a;
 
   white-space: pre;
+  text-align:left
 `;
 
 const MealPlan = ({ date, list, id }: IMealPlan): JSX.Element => {
