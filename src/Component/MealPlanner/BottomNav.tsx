@@ -4,7 +4,7 @@ import Button from '../Button';
 import { ReactComponent as Res1 } from '../../images/restaurant1.svg';
 import { ReactComponent as Res2 } from '../../images/restaurant2.svg';
 import { useRecoilState } from 'recoil';
-import { bottomNaviState, Restaurant } from '../../Atom/NavigatorAct';
+import { bottomNaviState, Restaurant } from '../../Atom/Navigator';
 
 const StyledBottomNav = styled.div`
   position: fixed;

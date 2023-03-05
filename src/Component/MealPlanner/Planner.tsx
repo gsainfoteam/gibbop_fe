@@ -6,7 +6,7 @@ import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import IMealPlan from '../../interfaces/MealPlan';
 import MealPlan from './MealPlan';
 import { useRecoilValue } from 'recoil';
-import { navigatorState } from '../../Atom/NavigatorAct';
+import { navigatorState } from '../../Atom/Navigator';
 
 const SelectDate = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { extraRestaurant, navigatorState, studentRestaurant } from '../../Atom/NavigatorAct';
+import { extraRestaurant, navigatorState, studentRestaurant } from '../../Atom/Navigator';
 import Button from '../Button';
 
 const StyledNavigator = styled.div`
