@@ -22,7 +22,7 @@ const StyledDiv = styled.div`
 const AddPicture = (): JSX.Element => {
     return(
         <StyledAdd>
-            <Button color="#FF6565"><Photo width="37.5px" /><StyledDiv>학식 사진 등록하고 20P 획득</StyledDiv></Button>
+            <Button color="#AFAFAF"><Photo width="103px" /><StyledDiv>등록된 사진이 없습니다.</StyledDiv></Button>
         </StyledAdd>
     )
 }

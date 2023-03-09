@@ -1,11 +1,12 @@
 import { atom } from 'recoil';
+import testImg from '../images/sampleMeal.png'
 
 export const PhotoState = atom({
   key: 'PhotoState',
   default: [
     {
-      picId: 0,
-      address: 'src/image/sampleMeal.png',
+      picId: 1,
+      address: testImg,
     },
   ],
 });
