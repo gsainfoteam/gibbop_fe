@@ -5,8 +5,12 @@ import styled from 'styled-components';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import IMealPlan from '../../interfaces/MealPlan';
 import MealPlan from './MealPlan';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { navigatorState } from '../../Atom/Navigator';
+import { isCalendarActivated } from '../../Atom/calendar';
+import { pickedDate } from '../../Atom/Date';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const SelectDate = styled.div`
   display: flex;
@@ -93,6 +97,9 @@ const TestData = [
 
 export const PlannerStudent = (): JSX.Element => {
   const state = useRecoilValue(navigatorState);
+  const [isCA, setCA] = useRecoilState(isCalendarActivated);
+  const date = useRecoilValue(pickedDate);
+
   let url = '';
   if (state.student.first_first) {
     url = '1학 1층';
@@ -102,11 +109,16 @@ export const PlannerStudent = (): JSX.Element => {
     url = '2학';
   }
 
+  const onClick = ():void => {
+    setCA(true);
+    console.log(isCA);
+  }
+
   return (
     <>
       <SelectDate>
-        <ShowDate>2022년 2월 22일 수요일</ShowDate>
-        <Button>
+        <ShowDate>{moment(date).format("YYYY년 MM월 DD일 dddd")}</ShowDate>
+        <Button onClick={onClick}>
           <CalenderImg />
         </Button>
       </SelectDate>

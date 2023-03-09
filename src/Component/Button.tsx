@@ -17,7 +17,7 @@ const StyledButton = styled.button<{ color?: string; background?: string }>`
   border: 0;
 `
 
-const Button = ({children, color, background, onClick}: IButton):JSX.Element => {
+const Button: React.FC<IButton> = ({children, color, background, onClick}) => {
   return(
     <StyledButton color={color} background={background} onClick={onClick}>{children}</StyledButton>
   )

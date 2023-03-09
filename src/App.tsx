@@ -4,7 +4,7 @@ import { RecoilRoot } from 'recoil';
 import InitialSetting from './Component/InitialSetting';
 import Login from './Component/Login';
 import MealPlanner from './Component/MealPlanner/MealPlanner';
-import MyPage from './Component/MyPage';
+import MyPage from './Component/MyPage/MyPage';
 
 function App(): JSX.Element {
   return (
