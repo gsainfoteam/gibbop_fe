@@ -43,7 +43,8 @@ const ButtonArea = styled.div`
   width: auto;
   display: flex;
   flex-direction: row-reverse;
-  padding-right: 50px;
+  padding-top: 5px;
+  padding-right: 10px;
 `;
 
 const InsideButton = styled.div`

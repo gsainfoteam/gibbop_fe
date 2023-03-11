@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -32,24 +33,30 @@ const StyledList = styled.div`
   text-align:left
 `;
 
-const MealPlan = ({ date, list, id }: IMealPlan): JSX.Element => {
+const MealPlan = ({ meal_date, meal, id }: IMealPlan): JSX.Element => {
   const [activatedId, SetId] = useRecoilState(plannerAct);
 
   const onClick = (id: number) => {
     SetId(id);
   };
 
+  const hour = moment(meal_date).hour()
+  let time = ' 아침';
+  if(hour > 11 && hour < 13) {
+    time = ' 점심';
+  } else if (hour >= 14 ) {
+    time = ' 저녁';
+  }
+
+  const displayTimeFormat = moment(meal_date).format('M월 DD일 (dd)') + time;
+
   return (
-    <Button
-      onClick={() => {
-        onClick(id);
-      }}
-    >
       <StyledMealPlan isActivate={activatedId === id}>
-        <StyledDate isActivate={activatedId === id}>{date}</StyledDate>
-        <StyledList>{list}</StyledList>
+        <Button onClick={()=>{onClick(id)}}>
+          <StyledDate isActivate={activatedId === id}>{displayTimeFormat}</StyledDate>
+          <StyledList>{meal}</StyledList>
+        </Button >
       </StyledMealPlan>
-    </Button>
   );
 };
 

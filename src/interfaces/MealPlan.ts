@@ -1,6 +1,6 @@
 interface IMealPlan {
-    date: string;
-    list: string;
+    meal_date: string;
+    meal: string;
     id: number;
 }
 

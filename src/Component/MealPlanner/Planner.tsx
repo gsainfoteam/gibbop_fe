@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../Button';
 import { ReactComponent as CalenderImg } from '../../images/calendar.svg';
 import styled from 'styled-components';
@@ -11,6 +11,8 @@ import { isCalendarActivated } from '../../Atom/calendar';
 import { pickedDate } from '../../Atom/Date';
 import moment from 'moment';
 import 'moment/locale/ko';
+import axios from 'axios';
+import Menu from './Menu';
 
 const SelectDate = styled.div`
   display: flex;
@@ -47,85 +49,65 @@ const Container = styled.div`
   margin-left: 30px;
 `;
 
-const TestData = [
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 1,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 2,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 3,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 4,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 5,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 6,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 7,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 8,
-  },
-  {
-    date: '2월 22일 (수) 점심',
-    list: '흑미밥\n콩나물국\n계란후라이 1\n떡갈비구이\n고기손만두*양념장\n김구이\n배추김치\n시리얼*우유 2\n토스트*잼\n야채샐러드*D',
-    id: 9,
-  },
-];
-
 export const PlannerStudent = (): JSX.Element => {
-  const state = useRecoilValue(navigatorState);
+  const currentNavigator = useRecoilValue(navigatorState);
   const [isCA, setCA] = useRecoilState(isCalendarActivated);
-  const date = useRecoilValue(pickedDate);
+  const currentDate = useRecoilValue(pickedDate);
+  const [mealPlans, setMealPlans] = useState<{ id: number; meal_date: string; meal: string }[]>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState(null);
 
-  let url = '';
-  if (state.student.first_first) {
-    url = '1학 1층';
-  } else if (state.student.first_second) {
-    url = '1학 2층';
-  } else if (state.student.second) {
-    url = '2학';
-  }
+  useEffect(() => {
+    const FetchMealPlan = async () => {
+      try {
+        setError(null);
+        setMealPlans([]);
+        setLoading(true);
 
-  const onClick = ():void => {
+        let restaurant = '1학 1층';
+        if (currentNavigator.student.first_second) restaurant = '1학 2층';
+        if (currentNavigator.student.second) restaurant = '2학';
+
+        console.log(restaurant);
+        const res = await axios.get<{ id: number; meal_date: string; meal: string }[]>(
+          'http://localhost:3000/meal_plan/cafeteria',
+          {
+            params: {
+              date: currentDate,
+              restaurant,
+            },
+          }
+        );
+        setMealPlans(res.data);
+      } catch (e: any) {
+        console.log(e);
+        setError(e);
+      }
+      setLoading(false);
+    };
+    FetchMealPlan();
+  }, [currentDate, currentNavigator]);
+
+  const onClick = (): void => {
     setCA(true);
     console.log(isCA);
-  }
+  };
 
+  if (!mealPlans) return <>no!</>;
+  if (error) return <>error</>;
+  if (loading) return <>Loading</>;
   return (
     <>
       <SelectDate>
-        <ShowDate>{moment(date).format("YYYY년 MM월 DD일 dddd")}</ShowDate>
+        <ShowDate>{moment(currentDate).format('YYYY년 MM월 DD일 dddd')}</ShowDate>
         <Button onClick={onClick}>
           <CalenderImg />
         </Button>
       </SelectDate>
       <Container>
         <ScrollMenu>
-          {TestData.map(({ date, list, id }: IMealPlan) => {
-            return <MealPlan key={'1'} date={date} list={`${list}\n${url}`} id={id} />;
+          {mealPlans.map(({ meal_date, meal, id }: IMealPlan) => {
+            return <MealPlan key={'1'} meal_date={meal_date} meal={meal} id={id} />;
           })}
         </ScrollMenu>
       </Container>
@@ -139,7 +121,12 @@ export const PlannerExtra = (): JSX.Element => {
   if (state.extra.RR) {
     where = '제2학생회관 2층';
   } else if (state.extra.Renaissance) {
-    where = '어딘지 모름';
+    where = '제1학생회관 2층';
   }
-  return <ShowLoc>{where}</ShowLoc>;
+  return (
+    <>
+      <ShowLoc>{where}</ShowLoc>
+      <Menu />
+    </>
+  );
 };
